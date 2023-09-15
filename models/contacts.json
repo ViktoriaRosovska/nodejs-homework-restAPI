@@ -9,7 +9,7 @@
     "id": "1DEXoP8AuCGYc1YgoQ6hw",
     "name": "Jane allgood",
     "phone": "000-888-6810",
-    "email": "Jane@gmail.com"
+    "email": "JaneJane@gmail.com"
   },
   {
     "id": "Z5sbDlS7pCzNsnAHLtDJd",
@@ -30,12 +30,6 @@
     "phone": "(704) 398-7993"
   },
   {
-    "id": "rsKkOQUi80UsgVPCcLZZW",
-    "name": "Alec Howard",
-    "email": "Donec.elementum@scelerisquescelerisquedui.net",
-    "phone": "(748) 206-2688"
-  },
-  {
     "name": "Alek Bolduin",
     "phone": "000-666",
     "email": "alekbolduin@gmail.com",
@@ -46,5 +40,11 @@
     "phone": "4334-666",
     "email": "Tom@gmail.com",
     "id": "F8KvDTKbv3lxp2kwcAGJF"
+  },
+  {
+    "name": "Janeeeee",
+    "phone": "000-7777888-6810",
+    "email": "Jane@gmail.com",
+    "id": "wJDsElPZq_FNMDYel88G1"
   }
 ]

@@ -27,7 +27,7 @@ const deleteContact = async (req, res) => {
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.status(200).json({ message: "Delete success" });
+  res.status(200).json({ message: "Contact deleted" });
 };
 
 const updateContactBody = async (req, res) => {

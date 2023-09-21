@@ -1,5 +1,11 @@
 const app = require("./app");
-const { mongoose, DB_HOST } = require("./mongodb/mongoose");
+const mongoose = require("mongoose");
+const { DB_HOST } = require("../config");
+require("dotenv").config();
+
+// console.log(process.env.MONGO_PASS);
+
+mongoose.set("strictQuery", true);
 
 mongoose
   .connect(DB_HOST)

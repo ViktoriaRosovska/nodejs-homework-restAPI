@@ -1,6 +1,7 @@
 const app = require("./app");
 const mongoose = require("mongoose");
-const { DB_HOST } = require("../config");
+// const { DB_HOST } = require("../config");
+const { DB_HOST } = process.env;
 require("dotenv").config();
 
 // console.log(process.env.MONGO_PASS);

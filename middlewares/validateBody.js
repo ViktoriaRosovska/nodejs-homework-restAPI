@@ -8,7 +8,10 @@ const validateBody = (schema) => {
         .filter((d) => d.type === "any.required")
         .map((d) => d.path.join("."))
         .join(", ");
-      if (Object.keys(req.body).length === 0) {
+      const pwdMsg = error.details.filter((d) => d.type === "string.pattern.base");
+      if (pwdMsg.length > 0) {
+        next(HttpError(400, pwdMsg[0].message));
+      } else if (Object.keys(req.body).length === 0) {
         next(HttpError(400, `Missing fields: ${field}`));
       } else {
         next(HttpError(400, `Missing required "${field}" field.`));

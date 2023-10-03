@@ -2,7 +2,7 @@ const User = require("../models/user.model");
 const brcypt = require("bcrypt");
 
 const { controllerWrapper, HttpError } = require("../helpers");
-const jwtGenetator = require("../utils/jwtGenerator");
+const { jwtGenetator } = require("../utils/jwtGenerator");
 const { userSubscription } = require("../utils/constants");
 
 const register = async (req, res) => {

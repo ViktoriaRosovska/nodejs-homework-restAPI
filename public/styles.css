@@ -1,0 +1,59 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#filelist {
+  margin: 20px;
+}
+
+#filelist img {
+  max-width: 370px;
+  border-radius: 2px;
+}
+
+#filelist li {
+  position: relative;
+  max-width: 370px;
+}
+
+#filelist span {
+  position: absolute;
+  right: 0.3em;
+
+  background: #000;
+  color: #f3f1ed;
+  padding: 0 0.25em;
+  border-radius: 2px;
+}
+
+#filelist span.size {
+  top: 1.7em;
+}
+
+#filelist span.name {
+  top: 0.3em;
+}
+
+#filelist .remove {
+  position: absolute;
+  right: 0.3em;
+  bottom: 0.5em;
+
+  background: #a33b58;
+  color: #f3f1ed;
+  padding: 0 0.25em;
+  border-radius: 2px;
+  display: none;
+}
+#filelist li:hover .remove {
+  display: block;
+}
+
+body {
+  background: #f3f1ed;
+}
+
+ul {
+  list-style: none;
+}

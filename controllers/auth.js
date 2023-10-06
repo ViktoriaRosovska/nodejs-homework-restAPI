@@ -1,12 +1,29 @@
-const User = require("../models/user.model");
 const brcypt = require("bcrypt");
+const fs = require("fs/promises");
+const path = require("path");
+const gravatar = require("gravatar");
 
+const User = require("../models/user.model");
 const { controllerWrapper, HttpError } = require("../helpers");
 const { jwtGenetator } = require("../utils/jwtGenerator");
 const { userSubscription } = require("../utils/constants");
 
+const avatarDir = path.join(__dirname, "../", "public", "avatars");
+
 const register = async (req, res) => {
   const { email, password } = req.body;
+  console.log(req.file);
+  if (req.file) {
+    const { path: tempUpload, originalname } = req.file;
+    const resultUpload = path.join(avatarDir, originalname);
+    await fs.rename(tempUpload, resultUpload);
+    let avatarURL = path.join("avatars", originalname);
+  } else {
+    avatarURL = gravatar.url(email);
+  }
+
+  console.log(avatarURL);
+
   const user = await User.findOne({ email });
   if (user) {
     throw HttpError(409, "Email is already in use");
@@ -14,7 +31,7 @@ const register = async (req, res) => {
 
   const hashPassword = await brcypt.hash(password, 10);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
   newUser.password = "";
   const payload = newUser._id;
   const token = jwtGenetator(payload);

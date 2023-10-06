@@ -16,6 +16,7 @@ app.use(cors());
 
 // express undestand which of type transmitted in request body
 app.use(express.json());
+app.use(express.static("public"));
 
 // write logs
 app.use(async (req, res, next) => {

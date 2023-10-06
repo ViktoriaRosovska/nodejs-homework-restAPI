@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration form</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <form>
+      <label for="email">Email:</label>
+      <input name="email" type="text" />
+      <label for="password">Password:</label>
+      <input name="password" type="password" />
+      <label for="fileAvatar">Avatar:</label>
+      <input
+        accept="image/*"
+        id="fileElem"
+        multiple=""
+        onchange="() => handleFiles(this.files)"
+        style="display: none"
+        type="file"
+        name="fileAvatar"
+      />
+      <a href="#" id="fileSelect">Select some files</a>
+      <div id="filelist"></div>
+      <div id="avatarImage"></div>
+    </form>
+
+    <script>
+      $(document).ready(function () {
+        var fileSelect = document.getElementById("fileSelect"),
+          fileElem = document.getElementById("fileElem");
+
+        fileSelect.addEventListener(
+          "click",
+          function (e) {
+            if (fileElem) {
+              fileElem.click();
+            }
+            e.preventDefault(); // prevent navigation to "#"
+          },
+          false
+        );
+
+        //$("#other").click(function() {
+        //  $("#target").click();
+        //});
+
+        $("#fileElem").change(function () {
+          handleFiles(this.files);
+        });
+
+        function bytesToSize(bytes) {
+          var kilobyte = 1024;
+          var megabyte = kilobyte * 1024;
+          var gigabyte = megabyte * 1024;
+          var terabyte = gigabyte * 1024;
+
+          if (bytes >= 0 && bytes < kilobyte) {
+            return bytes;
+          } else if (bytes >= kilobyte && bytes < megabyte) {
+            return (bytes / kilobyte).toFixed(0) + "K";
+          } else if (bytes >= megabyte && bytes < gigabyte) {
+            return (bytes / megabyte).toFixed(1) + "M";
+          } else if (bytes >= gigabyte && bytes < terabyte) {
+            return (bytes / gigabyte).toFixed(2) + "G";
+          } else if (bytes >= terabyte) {
+            return (bytes / terabyte).toFixed(2) + "T";
+          }
+        }
+
+        function handleFiles(files) {
+          var list = $("<ul></ul>");
+          $("#filelist").append(list);
+
+          for (var i = 0, f; (f = files[i]); i++) {
+            var reader = new FileReader();
+
+            reader.onload = (function (f) {
+              return function (e) {
+                var li = $("<li></li>");
+                $(list).append(li);
+
+                var a = $("<a href='#'>ONE</a>");
+                $(li).append(a);
+
+                $(a).append("<img src='" + e.target.result + "'/>");
+
+                $(a).append("<span class='name'>" + f.name + "</span>");
+
+                $(a).append("<span class='size'>" + bytesToSize(f.size) + "</span>");
+
+                $(li).append("<a href='#remove' class='remove'>remove</a>");
+              };
+            })(f);
+
+            reader.readAsDataURL(f);
+          }
+        }
+
+        $(".remove").on("click", function (event) {
+          event.preventDefault();
+          console.log(event.target.nodeName);
+        });
+      });
+    </script>
+  </body>
+</html>

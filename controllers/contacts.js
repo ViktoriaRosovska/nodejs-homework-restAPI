@@ -82,7 +82,7 @@ const updateContactBody = async (req, res) => {
 
   const result = await Contact.findOneAndUpdate({ _id: contactId, owner }, req.body, { new: true });
   if (!result) {
-    throw HttpError(404, { " message ": " Not found " });
+    throw HttpError(404, "Not found");
   }
   res.status(200).json(result);
 };
@@ -95,7 +95,7 @@ const updateStatusContact = async (req, res) => {
   const result = await Contact.findOneAndUpdate({ _id: contactId, owner }, { favorite: body.favorite }, { new: true });
 
   if (!result) {
-    throw HttpError(404, { " message ": " Not found " });
+    throw HttpError(404, "Not found");
   }
   res.status(200).json(result);
 };

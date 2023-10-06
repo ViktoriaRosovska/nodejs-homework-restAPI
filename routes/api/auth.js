@@ -2,11 +2,16 @@ const { Router } = require("express");
 const { validateBody, authenticate } = require("../../middlewares");
 const schema = require("../../schemas/schema");
 const controllers = require("../../controllers/auth");
-
+const { uploadAvatar } = require("../../middlewares");
 const authRouter = Router();
 
 // signup
-authRouter.post("/register", validateBody(schema.userSchema), controllers.register);
+authRouter.post(
+  "/register",
+  //   validateBody(schema.userSchema),
+  uploadAvatar.upload.single("avatarURL"),
+  controllers.register
+);
 
 // signin
 authRouter.post("/login", validateBody(schema.userSchema), controllers.login);

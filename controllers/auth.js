@@ -1,28 +1,20 @@
 const brcypt = require("bcrypt");
-const fs = require("fs/promises");
 const path = require("path");
-const gravatar = require("gravatar");
+require("dotenv").config();
 
 const User = require("../models/user.model");
 const { controllerWrapper, HttpError } = require("../helpers");
 const { jwtGenetator } = require("../utils/jwtGenerator");
 const { userSubscription } = require("../utils/constants");
+const { fileStorage } = require("../utils/aws.s3.filestorage");
 
-const avatarDir = path.join(__dirname, "../", "public", "avatars");
+// const avatarDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
+  const { originalname } = req.file;
+  let avatarURL = path.join("avatars", originalname);
   const { email, password } = req.body;
   console.log(req.file);
-  if (req.file) {
-    const { path: tempUpload, originalname } = req.file;
-    const resultUpload = path.join(avatarDir, originalname);
-    await fs.rename(tempUpload, resultUpload);
-    let avatarURL = path.join("avatars", originalname);
-  } else {
-    avatarURL = gravatar.url(email);
-  }
-
-  console.log(avatarURL);
 
   const user = await User.findOne({ email });
   if (user) {
@@ -34,12 +26,15 @@ const register = async (req, res) => {
   const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
   newUser.password = "";
   const payload = newUser._id;
+  avatarURL = await fileStorage(req, newUser._id);
+  console.log(avatarURL);
   const token = jwtGenetator(payload);
 
-  await User.findByIdAndUpdate(newUser._id, { token });
+  await User.findByIdAndUpdate(newUser._id, { token, avatarURL });
   res.status(201).json({
     email: newUser.email,
     token,
+    avatarURL,
   });
 };
 

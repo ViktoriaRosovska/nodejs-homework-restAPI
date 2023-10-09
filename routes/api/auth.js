@@ -9,7 +9,7 @@ const authRouter = Router();
 authRouter.post(
   "/register",
   //   validateBody(schema.userSchema),
-  uploadAvatar.upload.single("avatarURL"),
+  uploadAvatar.upload.single("avatar"),
   controllers.register
 );
 

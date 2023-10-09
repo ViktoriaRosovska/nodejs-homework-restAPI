@@ -57,3 +57,35 @@ body {
 ul {
   list-style: none;
 }
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+.card {
+  width: 600px;
+}
+.backlink {
+  color: white;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+.backlink:hover {
+  color: black;
+}
+
+.image-container {
+  width: 200px;
+  height: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #2196f3;
+}
+
+#preview-image {
+  display: block;
+  width: 200px;
+  height: 200px;
+  object-position: center;
+  object-fit: cover;
+}

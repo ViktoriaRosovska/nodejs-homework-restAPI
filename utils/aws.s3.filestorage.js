@@ -21,7 +21,7 @@ const fileStorage = async (req, userId) => {
     const cmd = new PutObjectCommand(params);
 
     try {
-      const s3 = new S3Client();
+      const s3 = new S3Client({ region: process.env.AWS_REGION });
       const resp = await s3.send(cmd);
       console.log(resp);
       avatarURL = `https://v.sund.uk/` + params.Key;

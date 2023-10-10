@@ -1028,3 +1028,4 @@ PATCH /api/users/avatars 10-10-2023_04:45:14
 PATCH /api/users/avatars 10-10-2023_04:46:09
 PATCH /api/users/avatars 10-10-2023_04:48:16
 POST /api/users/register 10-10-2023_04:49:55
+POST /api/users/register 10-10-2023_04:59:05

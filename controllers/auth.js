@@ -64,8 +64,8 @@ const login = async (req, res) => {
   const token = jwtGenetator(payload);
 
   await User.findByIdAndUpdate(user._id, { token });
-
-  res.status(200).json({ token, user: { email: user.email, subscription: user.subscription } });
+  const userAvatar = await User.findOne({ $group: { _id: user._id, avatarURL: "avatarURL" } });
+  res.status(200).json({ token, user: { email: user.email, subscription: user.subscription, avatarURL: userAvatar } });
 };
 
 const getCurrent = async (req, res) => {

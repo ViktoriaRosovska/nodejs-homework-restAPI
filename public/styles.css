@@ -75,8 +75,8 @@ ul {
 }
 
 .image-container {
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   margin-left: auto;
   margin-right: auto;
   border: 1px solid #2196f3;
@@ -84,8 +84,27 @@ ul {
 
 #preview-image {
   display: block;
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   object-position: center;
   object-fit: cover;
+}
+.preview-image-size {
+  color: black;
+}
+.auth-links {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 30px;
+}
+.auth-links a {
+  color: rgb(133, 133, 133);
+}
+.auth-links a:hover {
+  color: rgb(54, 54, 54);
+}
+.btn-wrapper {
+  display: flex;
+  justify-content: center;
 }

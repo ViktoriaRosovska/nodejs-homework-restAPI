@@ -14,7 +14,49 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-     
+    <header>
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- Container wrapper -->
+        <div class="container-fluid">
+          <!-- Toggle button -->
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-mdb-toggle="collapse"
+            data-mdb-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i class="fas fa-bars"></i>
+          </button>
+
+          <!-- Collapsible wrapper -->
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Navbar brand -->
+            <a class="navbar-brand mt-2 mt-lg-0" href="#">
+              <img
+                src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
+                height="15"
+                alt="MDB Logo"
+                loading="lazy"
+              />
+            </a>
+          </div>
+          <!-- Collapsible wrapper -->
+
+          <!-- Right elements -->
+          <div class="auth-links">
+            <a href="register.html">Register</a>
+            <a href="login.html">Login</a>
+          </div>
+          <!-- Right elements -->
+        </div>
+        <!-- Container wrapper -->
+      </nav>
+      <!-- Navbar -->
+    </header>
     <section class="vh-100" style="background-color: #2779e2">
       <a class="backlink" href="index.html">← Go to back</a>
       <div class="container h-100">
@@ -29,7 +71,12 @@
                     <h6 class="mb-0">Email address</h6>
                   </div>
                   <div class="col-md-9 pe-5">
-                    <input type="email" name="email" class="form-control form-control-lg" placeholder="example@example.com" />
+                    <input
+                      type="email"
+                      name="email"
+                      class="form-control form-control-lg"
+                      placeholder="example@example.com"
+                    />
                   </div>
                 </div>
 
@@ -40,28 +87,33 @@
                     <h6 class="mb-0">Password</h6>
                   </div>
                   <div class="col-md-9 pe-5">
-                    <input type="password" name="password" class="form-control" placeholder="Password"></textarea>
+                    <input type="password" name="password" class="form-control" placeholder="Password" />
                   </div>
                 </div>
                 <hr class="mx-n3" />
-                <div class="px-5 py-4">
+                <div class="px-5 py-4 btn-wrapper">
                   <button type="submit" class="btn btn-primary btn-lg btnsubmit">Send application</button>
                 </div>
-            </form>
+              </form>
             </div>
           </div>
         </div>
       </div>
     </section>
+
     <script>
-    const form = document.querySelector(".form");
-
-
-const formSubmit = (e) => {
-  e.preventDefault();
-  const formS = new FormData(form);
-  console.log(formS);
-};</script> 
+      const form = document.querySelector(".form");
+      const formSubmit = async (event) => {
+        event.preventDefault();
+        const formS = new FormData(form);
+        const resp = await fetch("/api/users/login", { method: "POST", body: formS });
+        console.log("response", resp);
+        if (resp.ok) {
+          res.status(200).json();
+        } else {
+          //...
+        }
+      };
+    </script>
   </body>
 </html>
-

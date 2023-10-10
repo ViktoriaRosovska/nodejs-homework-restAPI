@@ -1,18 +1,28 @@
 const multer = require("multer");
 const path = require("path");
+const { HttpError } = require("../helpers");
 
 const tempDir = path.join(__dirname, "../", "temp");
-console.log(tempDir);
+
+const multerFilter = (req, file, cbk) => {
+  if (file.mimetype.startsWith("image/")) {
+    cbk(null, true);
+  } else {
+    cbk(HttpError(400, "Please, upload image only"), false);
+  }
+};
+
 const multerConfig = multer.diskStorage({
   destination: tempDir,
-  filename: (req, file, callback) => {
-    callback(null, file.originalname);
+  filename: (req, file, cbk) => {
+    cbk(null, file.originalname);
   },
   limit: 2 * 1024 * 1024,
 });
 
 const upload = multer({
   storage: multerConfig,
+  fileFilter: multerFilter,
 });
 
 /* upload.array("avatarURL", 8) - можна завантажити в поле avatarURL до 8 файлів одночасно

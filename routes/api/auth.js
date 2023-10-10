@@ -3,18 +3,19 @@ const { validateBody, authenticate } = require("../../middlewares");
 const schema = require("../../schemas/schema");
 const controllers = require("../../controllers/auth");
 const { uploadAvatar } = require("../../middlewares");
+const multer = require("multer");
 const authRouter = Router();
 
 // signup
 authRouter.post(
   "/register",
-  //   validateBody(schema.userSchema),
   uploadAvatar.upload.single("avatar"),
+  validateBody(schema.registerSchema),
   controllers.register
 );
 
 // signin
-authRouter.post("/login", validateBody(schema.userSchema), controllers.login);
+authRouter.post("/login", multer().none(), validateBody(schema.loginSchema), controllers.login);
 
 // current
 authRouter.get("/current", authenticate, controllers.getCurrent);

@@ -12,15 +12,21 @@ const favoriteSchema = Joi.object({
   favorite: Joi.bool().required(),
 });
 
-const userSchema = Joi.object({
+const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
+  password: Joi.string().required(),
+});
+
+const registerSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+  avatar: Joi.string().allow("", null),
   password: Joi.string().min(8).pattern(passwordRegexp).required().messages({
     "string.pattern.base": "Must be at least 8 symbols, has 1 upper character, 1 number and one special symbol",
   }),
 });
-
 module.exports = {
   contactSchema,
   favoriteSchema,
-  userSchema,
+  loginSchema,
+  registerSchema,
 };

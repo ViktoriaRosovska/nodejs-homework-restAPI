@@ -14,8 +14,50 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-   
-    <section class="vh-100" style="background-color: #2779e2"> 
+    <header>
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- Container wrapper -->
+        <div class="container-fluid">
+          <!-- Toggle button -->
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-mdb-toggle="collapse"
+            data-mdb-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i class="fas fa-bars"></i>
+          </button>
+
+          <!-- Collapsible wrapper -->
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Navbar brand -->
+            <a class="navbar-brand mt-2 mt-lg-0" href="#">
+              <img
+                src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
+                height="15"
+                alt="MDB Logo"
+                loading="lazy"
+              />
+            </a>
+          </div>
+          <!-- Collapsible wrapper -->
+
+          <!-- Right elements -->
+          <div class="auth-links">
+            <a href="register.html">Register</a>
+            <a href="login.html">Login</a>
+          </div>
+          <!-- Right elements -->
+        </div>
+        <!-- Container wrapper -->
+      </nav>
+      <!-- Navbar -->
+    </header>
+    <section class="vh-100" style="background-color: #2779e2">
       <a class="backlink" href="index.html">← Go to back</a>
       <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -29,7 +71,12 @@
                     <h6 class="mb-0">Email address</h6>
                   </div>
                   <div class="col-md-9 pe-5">
-                    <input type="email" class="form-control form-control-lg" name="email" placeholder="example@example.com" />
+                    <input
+                      type="email"
+                      class="form-control form-control-lg"
+                      name="email"
+                      placeholder="example@example.com"
+                    />
                   </div>
                 </div>
 
@@ -40,7 +87,7 @@
                     <h6 class="mb-0">Password</h6>
                   </div>
                   <div class="col-md-9 pe-5">
-                    <input type="password" class="form-control" name="password" placeholder="Password"></textarea>
+                    <input type="password" class="form-control" name="password" placeholder="Password" />
                   </div>
                 </div>
 
@@ -51,23 +98,28 @@
                     <h6 class="mb-0">Upload Avatar</h6>
                   </div>
                   <div class="col-md-9 pe-5">
-                    <input class="form-control form-control-lg" name="avatar" id="formFileLg" type="file" accept="image/png, image/jpeg" onchange="showPreview(event)"/>
-                   
-                      Upload your Avatar. Max file size 200 KB 
-                     
-                    </div>
-                     
+                    <input
+                      class="form-control form-control-lg"
+                      name="avatar"
+                      id="formFileLg"
+                      type="file"
+                      accept="image/png, image/jpeg"
+                      onchange="showPreview(event)"
+                    />
+
+                    Upload your Avatar. Max file size 2MB
                   </div>
-               
+                </div>
 
                 <hr class="mx-n3" />
- <div class="small text-muted mt-2"><div class="image-container">
- <img id="preview-image" alt="avatar"/>
-                </div>
-                <div class="px-5 py-4">
-                  <button type="submit" class="btn btn-primary btn-lg">Send application</button>
-                </div>
-               
+                <div class="small text-muted mt-2">
+                  <div class="image-container">
+                    <img id="preview-image" alt="avatar" />
+                    <p class="preview-image-size">fileSize</p>
+                  </div>
+                  <div class="px-5 py-4 btn-wrapper">
+                    <button type="submit" class="btn btn-primary btn-lg">Send application</button>
+                  </div>
                 </div>
               </form>
             </div>
@@ -78,27 +130,29 @@
     <script>
       const form = document.querySelector(".form");
 
-function showPreview(event) {
-  if (event.target.files.length > 0) {
-    const srcURL = URL.createObjectURL(event.target.files[0]);
-    const preview = document.getElementById("preview-image");
-    preview.src = srcURL ?? "";
-  }
-}
+      function showPreview(event) {
+        if (event.target.files.length > 0) {
+          const srcURL = URL.createObjectURL(event.target.files[0]);
+          const preview = document.getElementById("preview-image");
+          preview.src = srcURL ?? "";
+          const fileSize = (event.target.files[0].size / 1024).toFixed(2);
+          console.log(fileSize);
+          const paragraphImageSize = document.querySelector(".preview-image-size");
+          paragraphImageSize.textContent = `${fileSize} KB`;
+        }
+      }
 
-const formSubmit = async (e) => {
-  e.preventDefault();
-  const formS = new FormData(form);
-  const resp = await fetch("/api/users/register", { method: "POST", body: formS });
-  console.log("response", resp);
-  if (resp.ok) {
-     res.status(201).json(
-  );
-  } else {
-    //...
-  }
-};
-
-    </script> 
+      const formSubmit = async (event) => {
+        event.preventDefault();
+        const formS = new FormData(form);
+        const resp = await fetch("/api/users/register", { method: "POST", body: formS });
+        console.log("response", resp);
+        if (resp.ok) {
+          res.status(201).json();
+        } else {
+          //...
+        }
+      };
+    </script>
   </body>
 </html>

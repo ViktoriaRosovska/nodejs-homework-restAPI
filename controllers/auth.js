@@ -1,20 +1,29 @@
 const brcypt = require("bcrypt");
 const path = require("path");
 require("dotenv").config();
+const gravatar = require("gravatar");
 
 const User = require("../models/user.model");
 const { controllerWrapper, HttpError } = require("../helpers");
 const { jwtGenetator } = require("../utils/jwtGenerator");
 const { userSubscription } = require("../utils/constants");
 const { fileStorage } = require("../utils/aws.s3.filestorage");
+const { resizeImage } = require("../utils/resizeImage");
 
 // const avatarDir = path.join(__dirname, "../", "public", "avatars");
+const tempDir = path.join(__dirname, "../", "temp");
 
 const register = async (req, res) => {
-  const { originalname } = req.file;
-  let avatarURL = path.join("avatars", originalname);
   const { email, password } = req.body;
-  console.log(req.file);
+  let avatarURL = null;
+  if (req.file) {
+    const { path: tempUpload, originalname } = req.file;
+    const imagePath = path.join(tempDir, originalname);
+    resizeImage(tempUpload, imagePath);
+    avatarURL = path.join("avatars", originalname);
+  } else {
+    avatarURL = "http:" + gravatar.url(email) + "?s=200&d=identicon";
+  }
 
   const user = await User.findOne({ email });
   if (user) {

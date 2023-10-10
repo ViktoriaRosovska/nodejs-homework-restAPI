@@ -1018,3 +1018,13 @@ POST /api/users/register 10-10-2023_04:29:28
 PATCH /api/users/avatar 10-10-2023_04:30:18
 PATCH /api/users/avatar 10-10-2023_04:30:52
 PATCH /api/users/avatar 10-10-2023_04:33:23
+POST /api/users/register 10-10-2023_04:39:06
+PATCH /api/users/avatars 10-10-2023_04:39:57
+PATCH /api/users/avatars 10-10-2023_04:40:35
+PATCH /api/users/avatars 10-10-2023_04:41:30
+PATCH /api/users/avatars 10-10-2023_04:43:47
+PATCH /api/users/avatars 10-10-2023_04:44:22
+PATCH /api/users/avatars 10-10-2023_04:45:14
+PATCH /api/users/avatars 10-10-2023_04:46:09
+PATCH /api/users/avatars 10-10-2023_04:48:16
+POST /api/users/register 10-10-2023_04:49:55

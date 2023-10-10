@@ -9,7 +9,7 @@ const authRouter = Router();
 // signup
 authRouter.post(
   "/register",
-  uploadAvatar.upload.single("avatar"),
+  uploadAvatar.upload.single("avatars"),
   validateBody(schema.registerSchema),
   controllers.register
 );
@@ -27,6 +27,6 @@ authRouter.post("/logout", authenticate, controllers.logout);
 authRouter.patch("/", authenticate, controllers.updateSubscription);
 
 // update avatar image
-authRouter.patch("/avatar", authenticate, uploadAvatar.upload.single("avatar"), controllers.updateAvatar);
+authRouter.patch("/avatars", authenticate, uploadAvatar.upload.single("avatars"), controllers.updateAvatar);
 
 module.exports = authRouter;

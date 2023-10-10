@@ -109,7 +109,7 @@
         const resp = await fetch("/api/users/login", { method: "POST", body: formS });
         console.log("response", resp);
         if (resp.ok) {
-          res.status(200).json();
+          resp.status(200).json();
         } else {
           //...
         }

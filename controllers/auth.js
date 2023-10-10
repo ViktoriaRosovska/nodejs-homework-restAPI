@@ -20,7 +20,7 @@ const register = async (req, res) => {
     const { path: tempUpload, originalname } = req.file;
     const imagePath = path.join(tempDir, originalname);
     resizeImage(tempUpload, imagePath);
-    avatarURL = path.join("avatars", originalname);
+    avatarURL = path.join(tempDir, originalname);
   } else {
     avatarURL = "http:" + gravatar.url(email) + "?s=200&d=identicon";
   }
@@ -36,7 +36,7 @@ const register = async (req, res) => {
   newUser.password = "";
   const payload = newUser._id;
   avatarURL = await fileStorage(req, newUser._id);
-  console.log(avatarURL);
+
   const token = jwtGenetator(payload);
 
   await User.findByIdAndUpdate(newUser._id, { token, avatarURL });
@@ -64,8 +64,11 @@ const login = async (req, res) => {
   const token = jwtGenetator(payload);
 
   await User.findByIdAndUpdate(user._id, { token });
-  const userAvatar = await User.findOne({ $group: { _id: user._id, avatarURL: "avatarURL" } });
-  res.status(200).json({ token, user: { email: user.email, subscription: user.subscription, avatarURL: userAvatar } });
+
+  const userAvatar = await User.findOne({ avatarURL: user.avatarURL });
+  res
+    .status(200)
+    .json({ token, user: { email: user.email, subscription: user.subscription, avatarURL: userAvatar.avatarURL } });
 };
 
 const getCurrent = async (req, res) => {
@@ -92,10 +95,30 @@ const updateSubscription = async (req, res) => {
   res.status(200).json({ email, subscription });
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id, email } = req.user;
+  let avatarURL = null;
+  if (req.file) {
+    const { path: tempUpload, originalname } = req.file;
+    const imagePath = path.join(tempDir, originalname);
+    resizeImage(tempUpload, imagePath);
+    avatarURL = path.join(tempDir, originalname);
+  } else {
+    avatarURL = "http:" + gravatar.url(email) + "?s=200&d=identicon";
+  }
+  avatarURL = await fileStorage(req, _id);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.status(201).json({
+    avatarURL,
+  });
+};
+
 module.exports = {
   register: controllerWrapper(register),
   login: controllerWrapper(login),
   getCurrent: controllerWrapper(getCurrent),
   logout: controllerWrapper(logout),
   updateSubscription: controllerWrapper(updateSubscription),
+  updateAvatar: controllerWrapper(updateAvatar),
 };

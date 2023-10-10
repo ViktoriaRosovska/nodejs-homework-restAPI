@@ -26,4 +26,7 @@ authRouter.post("/logout", authenticate, controllers.logout);
 // update user subscription
 authRouter.patch("/", authenticate, controllers.updateSubscription);
 
+// update avatar image
+authRouter.patch("/avatar", authenticate, uploadAvatar.upload.single("avatar"), controllers.updateAvatar);
+
 module.exports = authRouter;

@@ -29,4 +29,9 @@ authRouter.patch("/", authenticate, controllers.updateSubscription);
 // update avatar image
 authRouter.patch("/avatars", authenticate, uploadAvatar.upload.single("avatars"), controllers.updateAvatar);
 
+// get user's verification token
+authRouter.get("/verify/:verificationToken", controllers.verifyEmail);
+
+authRouter.post("/verify", validateBody(schema.emailSchema), controllers.resendVerifyEmail);
+
 module.exports = authRouter;

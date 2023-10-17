@@ -4,11 +4,15 @@ require("dotenv").config();
 const gravatar = require("gravatar");
 
 const User = require("../models/user.model");
-const { controllerWrapper, HttpError } = require("../helpers");
+const { controllerWrapper, HttpError, sendEmail } = require("../helpers");
 const { jwtGenetator } = require("../utils/jwtGenerator");
 const { userSubscription } = require("../utils/constants");
 const { fileStorage } = require("../utils/aws.s3.filestorage");
 const { resizeImage } = require("../utils/resizeImage");
+const { nanoid } = require("nanoid");
+// const { verify } = require("crypto");
+require("dotenv").config();
+const ejs = require("ejs");
 
 // const avatarDir = path.join(__dirname, "../", "public", "avatars");
 const tempDir = path.join(__dirname, "../", "temp");
@@ -16,6 +20,7 @@ const tempDir = path.join(__dirname, "../", "temp");
 const register = async (req, res) => {
   const { email, password } = req.body;
   let avatarURL = null;
+
   if (req.file) {
     const { path: tempUpload, originalname } = req.file;
     const imagePath = path.join(tempDir, originalname);
@@ -32,7 +37,27 @@ const register = async (req, res) => {
 
   const hashPassword = await brcypt.hash(password, 10);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
+  const verificationToken = nanoid();
+
+  const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL, verificationToken });
+  let emailTemplate;
+  ejs
+    .renderFile(path.join(__dirname, "../", "templates/welcome.ejs"), {
+      user_email: email,
+      confirm_link: `${process.env.BASE_URL}/api/users/verify/${verificationToken}`,
+    })
+    .then((result) => {
+      emailTemplate = result;
+
+      const verifyEmail = {
+        to: email,
+        subject: "Verify email",
+        // html: `<a target="_blank" href="${process.env.BASE_URL}/api/users/verify/${verificationToken}">Verify email</a>`,
+        html: emailTemplate,
+      };
+      sendEmail(verifyEmail);
+    });
+
   newUser.password = "";
   const payload = newUser._id;
   avatarURL = await fileStorage(req, newUser._id);
@@ -47,12 +72,47 @@ const register = async (req, res) => {
   });
 };
 
+const verifyEmail = async (req, res) => {
+  const { verificationToken } = req.params;
+
+  const user = await User.findOne({ verificationToken });
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+
+  await User.findByIdAndUpdate(user._id, { verify: true, verificationToken: "" });
+  res.status(200).json({ message: "Verification successful" });
+};
+
+const resendVerifyEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw HttpError(401, "Email not found");
+  }
+  if (user.verify) {
+    throw HttpError(400, "Verification has already been passed");
+  }
+
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    html: `<a target="_blank" href="${process.env.BASE_URL}/api/users/verify/${user.verificationToken}">Verify email</a>`,
+  };
+  await sendEmail(verifyEmail);
+  res.status(200).json({ message: "Verification email sent" });
+};
+
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
   if (!user) {
     throw HttpError(401, "Email or password invalid");
+  }
+
+  if (!user.verify) {
+    throw HttpError(401, "Email is not verify");
   }
 
   const passwordCompare = await brcypt.compare(password, user.password);
@@ -121,4 +181,6 @@ module.exports = {
   logout: controllerWrapper(logout),
   updateSubscription: controllerWrapper(updateSubscription),
   updateAvatar: controllerWrapper(updateAvatar),
+  verifyEmail: controllerWrapper(verifyEmail),
+  resendVerifyEmail: controllerWrapper(resendVerifyEmail),
 };

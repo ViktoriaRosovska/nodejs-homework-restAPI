@@ -13,6 +13,7 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));
 app.use(cors());
+app.set("view engine", "ejs");
 
 // express undestand which of type transmitted in request body
 app.use(express.json());

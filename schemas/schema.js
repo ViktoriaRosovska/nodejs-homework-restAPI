@@ -24,9 +24,15 @@ const registerSchema = Joi.object({
     "string.pattern.base": "Must be at least 8 symbols, has 1 upper character, 1 number and one special symbol",
   }),
 });
+
+const emailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
+
 module.exports = {
   contactSchema,
   favoriteSchema,
   loginSchema,
   registerSchema,
+  emailSchema,
 };

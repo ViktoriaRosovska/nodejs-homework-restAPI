@@ -10,11 +10,9 @@ const { userSubscription } = require("../utils/constants");
 const { fileStorage } = require("../utils/aws.s3.filestorage");
 const { resizeImage } = require("../utils/resizeImage");
 const { nanoid } = require("nanoid");
-// const { verify } = require("crypto");
 require("dotenv").config();
 const ejs = require("ejs");
 
-// const avatarDir = path.join(__dirname, "../", "public", "avatars");
 const tempDir = path.join(__dirname, "../", "temp");
 
 const register = async (req, res) => {

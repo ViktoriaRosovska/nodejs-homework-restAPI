@@ -52,7 +52,6 @@ const register = async (req, res) => {
       const verifyEmail = {
         to: email,
         subject: "Verify email",
-        // html: `<a target="_blank" href="${process.env.BASE_URL}/api/users/verify/${verificationToken}">Verify email</a>`,
         html: emailTemplate,
       };
       sendEmail(verifyEmail);
@@ -156,16 +155,17 @@ const updateSubscription = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
-  const { _id, email } = req.user;
+  const { _id } = req.user;
   let avatarURL = null;
-  if (req.file) {
-    const { path: tempUpload, originalname } = req.file;
-    const imagePath = path.join(tempDir, originalname);
-    resizeImage(tempUpload, imagePath);
-    avatarURL = path.join(tempDir, originalname);
-  } else {
-    avatarURL = "http:" + gravatar.url(email) + "?s=200&d=identicon";
+  if (!req.file) {
+    throw HttpError(400, "Please, upload image");
   }
+
+  const { path: tempUpload, originalname } = req.file;
+  const imagePath = path.join(tempDir, originalname);
+  resizeImage(tempUpload, imagePath);
+  avatarURL = path.join(tempDir, originalname);
+
   avatarURL = await fileStorage(req, _id);
   await User.findByIdAndUpdate(_id, { avatarURL });
 
